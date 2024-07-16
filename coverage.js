@@ -34,8 +34,8 @@ const compareDetailedCoverages = (oldCoverages, newCoverages) => {
 }
 
 const extractCoverageFromMetricsElement = (metrics) => {
-    const total = parseInt(metrics.attributes.elements, 10);
-    const covered = parseInt(metrics.attributes.coveredelements, 10);
+    const total = metrics.attributes.elements ? parseInt(metrics.attributes.elements, 10) : parseInt(metrics.attributes.statements, 10);
+    const covered = metrics.attributes.coveredelements ? parseInt(metrics.attributes.coveredelements, 10) : parseInt(metrics.attributes.coveredstatements, 10);
     const coverage = parseFloat((100 * covered / total).toFixed(3));
 
     return { total, covered, coverage };
@@ -45,7 +45,7 @@ const extractDetailedCoverages = (json) => {
     const out = {};
 
     for (const fileElement of retrieveDetailedFilesElements(json)) {
-        out[fileElement.attributes.name.replace('/home/runner/work/', '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
+        out[fileElement.attributes.path.replace('/home/runner/work/', '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
     }
 
     return out;
@@ -59,8 +59,8 @@ const parseCoverage = async (file) => {
         fail('Coverage file not found :/');
     }
 
-    const options = {ignoreComment: true, alwaysChildren: true};
-    const json = convert.xml2js(fs.readFileSync(files[0], {encoding: 'utf8'}), options);
+    const options = { ignoreComment: true, alwaysChildren: true };
+    const json = convert.xml2js(fs.readFileSync(files[0], { encoding: 'utf8' }), options);
 
     return {
         overall: extractCoverageFromMetricsElement(retrieveGlobalMetricsElement(json)),

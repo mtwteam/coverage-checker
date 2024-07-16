@@ -25,7 +25,7 @@ const buildDetailedDiffTable = (diff) => {
         out.push('| ' + entry.filename + ' | ' + entry.old + ' | ' + entry.new + ' | ');
     }
 
-    return out . join('\n');
+    return out.join('\n');
 };
 
 const buildDetailedDiffMessage = (detailedDiff) => {
@@ -39,24 +39,28 @@ const buildDetailedDiffMessage = (detailedDiff) => {
         out += '<details>\n<summary> :green_circle: :arrow_upper_right: Improved files:</summary> \n' + buildDetailedDiffTable(detailedDiff.improved) + '\n</details>\n\n';
     }
     if (detailedDiff.degraded.length > 0) {
-        out += '<details>\n<summary> :red_circle: :arrow_lower_right: Degraded files:</summary> \n' + buildDetailedDiffTable(detailedDiff.degraded)  + '\n</details>\n\n';
+        out += '<details>\n<summary> :red_circle: :arrow_lower_right: Degraded files:</summary> \n' + buildDetailedDiffTable(detailedDiff.degraded) + '\n</details>\n\n';
     }
 
     return out + '\n';
 };
 
 const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':x: Your code coverage has been degraded :sob: ' 
-        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        + buildDeltaMessage(oldCoverage, newCoverage) 
-        + buildDetailedDiffMessage(detailedDiff);
+    return [
+        ':x: Your code coverage has been degraded :sob:',
+        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        buildDeltaMessage(oldCoverage, newCoverage),
+        buildDetailedDiffMessage(detailedDiff)
+    ].join(' ');
 };
 
 const buildSuccessMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':white_check_mark: Your code coverage has not been degraded :tada: ' 
-        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        + buildDeltaMessage(oldCoverage, newCoverage) 
-        + buildDetailedDiffMessage(detailedDiff);
+    return [
+        ':white_check_mark: Your code coverage has not been degraded :tada:',
+        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        buildDeltaMessage(oldCoverage, newCoverage),
+        buildDetailedDiffMessage(detailedDiff)
+    ].join(' ');
 };
 
 const buildResultMessage = (oldCoverage, newCoverage, detailedDiff = null) => {

@@ -223,8 +223,8 @@ const compareDetailedCoverages = (oldCoverages, newCoverages) => {
 }
 
 const extractCoverageFromMetricsElement = (metrics) => {
-    const total = parseInt(metrics.attributes.elements, 10);
-    const covered = parseInt(metrics.attributes.coveredelements, 10);
+    const total = metrics.attributes.elements ? parseInt(metrics.attributes.elements, 10) : parseInt(metrics.attributes.statements, 10);
+    const covered = metrics.attributes.coveredelements ? parseInt(metrics.attributes.coveredelements, 10) : parseInt(metrics.attributes.coveredstatements, 10);
     const coverage = parseFloat((100 * covered / total).toFixed(3));
 
     return { total, covered, coverage };
@@ -234,7 +234,7 @@ const extractDetailedCoverages = (json) => {
     const out = {};
 
     for (const fileElement of retrieveDetailedFilesElements(json)) {
-        out[fileElement.attributes.name.replace('/home/runner/work/', '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
+        out[fileElement.attributes.path.replace('/home/runner/work/', '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
     }
 
     return out;
@@ -248,8 +248,8 @@ const parseCoverage = async (file) => {
         fail('Coverage file not found :/');
     }
 
-    const options = {ignoreComment: true, alwaysChildren: true};
-    const json = convert.xml2js(fs.readFileSync(files[0], {encoding: 'utf8'}), options);
+    const options = { ignoreComment: true, alwaysChildren: true };
+    const json = convert.xml2js(fs.readFileSync(files[0], { encoding: 'utf8' }), options);
 
     return {
         overall: extractCoverageFromMetricsElement(retrieveGlobalMetricsElement(json)),
@@ -400,7 +400,7 @@ const buildDetailedDiffTable = (diff) => {
         out.push('| ' + entry.filename + ' | ' + entry.old + ' | ' + entry.new + ' | ');
     }
 
-    return out . join('\n');
+    return out.join('\n');
 };
 
 const buildDetailedDiffMessage = (detailedDiff) => {
@@ -414,24 +414,28 @@ const buildDetailedDiffMessage = (detailedDiff) => {
         out += '<details>\n<summary> :green_circle: :arrow_upper_right: Improved files:</summary> \n' + buildDetailedDiffTable(detailedDiff.improved) + '\n</details>\n\n';
     }
     if (detailedDiff.degraded.length > 0) {
-        out += '<details>\n<summary> :red_circle: :arrow_lower_right: Degraded files:</summary> \n' + buildDetailedDiffTable(detailedDiff.degraded)  + '\n</details>\n\n';
+        out += '<details>\n<summary> :red_circle: :arrow_lower_right: Degraded files:</summary> \n' + buildDetailedDiffTable(detailedDiff.degraded) + '\n</details>\n\n';
     }
 
     return out + '\n';
 };
 
 const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':x: Your code coverage has been degraded :sob: ' 
-        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        + buildDeltaMessage(oldCoverage, newCoverage) 
-        + buildDetailedDiffMessage(detailedDiff);
+    return [
+        ':x: Your code coverage has been degraded :sob:',
+        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        buildDeltaMessage(oldCoverage, newCoverage),
+        buildDetailedDiffMessage(detailedDiff)
+    ].join(' ');
 };
 
 const buildSuccessMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':white_check_mark: Your code coverage has not been degraded :tada: ' 
-        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        + buildDeltaMessage(oldCoverage, newCoverage) 
-        + buildDetailedDiffMessage(detailedDiff);
+    return [
+        ':white_check_mark: Your code coverage has not been degraded :tada:',
+        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        buildDeltaMessage(oldCoverage, newCoverage),
+        buildDetailedDiffMessage(detailedDiff)
+    ].join(' ');
 };
 
 const buildResultMessage = (oldCoverage, newCoverage, detailedDiff = null) => {
