@@ -36,7 +36,11 @@ const check = async (coverages, coverageBranch, coverageFiles, reportMessageHead
 
         const detailedDiff = (baseDetailedCoverageResult === null) ? null : compareDetailedCoverages(baseDetailedCoverageResult, coverages[summaryFile].detailed);
 
-        messages.push('*' + coverageFiles.find(e => e.summary === summaryFile).label + '* \n\n' + buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        if (coverageFiles.length === 1) {
+            messages.push(buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        } else {
+            messages.push('*' + coverageFiles.find(e => e.summary === summaryFile).label + '* \n\n' + buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        }
     }
 
     if (withAverage && Object.keys(coverages).length > 1) {
@@ -381,9 +385,6 @@ const buildDeltaMessage = (oldCoverage, newCoverage) => {
         '| Coverage | ' + oldCoverage.coverage + '% | ' + newCoverage.coverage + '% |',
         '| Total lines | ' + oldCoverage.total + ' | ' + newCoverage.total + ' |',
         '| Covered lines | ' + oldCoverage.covered + ' | ' + newCoverage.covered + ' |',
-        '',
-        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        '',
         ''
     ].join('\n');
 }
@@ -420,11 +421,17 @@ const buildDetailedDiffMessage = (detailedDiff) => {
 };
 
 const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':x: Your code coverage has been degraded :sob:' + buildDeltaMessage(oldCoverage, newCoverage) + buildDetailedDiffMessage(detailedDiff);
+    return ':x: Your code coverage has been degraded :sob: ' 
+        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        + buildDeltaMessage(oldCoverage, newCoverage) 
+        + buildDetailedDiffMessage(detailedDiff);
 };
 
 const buildSuccessMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':white_check_mark: Your code coverage has not been degraded :tada:' + buildDeltaMessage(oldCoverage, newCoverage)  + buildDetailedDiffMessage(detailedDiff);
+    return ':white_check_mark: Your code coverage has not been degraded :tada: ' 
+        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        + buildDeltaMessage(oldCoverage, newCoverage) 
+        + buildDetailedDiffMessage(detailedDiff);
 };
 
 const buildResultMessage = (oldCoverage, newCoverage, detailedDiff = null) => {
@@ -11295,7 +11302,7 @@ const COVERAGE_DIRECTORY = core.getInput('directory');
 const COVERAGE_FILES = JSON.parse(core.getInput('files'));
 const REPO = `https://${process.env.GITHUB_ACTOR}:${core.getInput('token')}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const HISTORY_FILENAME = 'coverage-history.json';
-const REPORT_MESSAGE_HEADER = 'Issued by Coverage Checker:';
+const REPORT_MESSAGE_HEADER = '<!-- Issued by Coverage Checker -->';
 
 const buildFilesConfig = (directory, filesConfig) => {
     if (COVERAGE_DIRECTORY === '') {

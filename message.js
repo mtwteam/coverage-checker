@@ -10,9 +10,6 @@ const buildDeltaMessage = (oldCoverage, newCoverage) => {
         '| Coverage | ' + oldCoverage.coverage + '% | ' + newCoverage.coverage + '% |',
         '| Total lines | ' + oldCoverage.total + ' | ' + newCoverage.total + ' |',
         '| Covered lines | ' + oldCoverage.covered + ' | ' + newCoverage.covered + ' |',
-        '',
-        '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
-        '',
         ''
     ].join('\n');
 }
@@ -49,11 +46,17 @@ const buildDetailedDiffMessage = (detailedDiff) => {
 };
 
 const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':x: Your code coverage has been degraded :sob:' + buildDeltaMessage(oldCoverage, newCoverage) + buildDetailedDiffMessage(detailedDiff);
+    return ':x: Your code coverage has been degraded :sob: ' 
+        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        + buildDeltaMessage(oldCoverage, newCoverage) 
+        + buildDetailedDiffMessage(detailedDiff);
 };
 
 const buildSuccessMessage = (oldCoverage, newCoverage, detailedDiff) => {
-    return ':white_check_mark: Your code coverage has not been degraded :tada:' + buildDeltaMessage(oldCoverage, newCoverage)  + buildDetailedDiffMessage(detailedDiff);
+    return ':white_check_mark: Your code coverage has not been degraded :tada: ' 
+        + '∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3),
+        + buildDeltaMessage(oldCoverage, newCoverage) 
+        + buildDetailedDiffMessage(detailedDiff);
 };
 
 const buildResultMessage = (oldCoverage, newCoverage, detailedDiff = null) => {

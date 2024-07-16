@@ -13,7 +13,7 @@ const COVERAGE_DIRECTORY = core.getInput('directory');
 const COVERAGE_FILES = JSON.parse(core.getInput('files'));
 const REPO = `https://${process.env.GITHUB_ACTOR}:${core.getInput('token')}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const HISTORY_FILENAME = 'coverage-history.json';
-const REPORT_MESSAGE_HEADER = 'Issued by Coverage Checker:';
+const REPORT_MESSAGE_HEADER = '<!-- Issued by Coverage Checker -->';
 
 const buildFilesConfig = (directory, filesConfig) => {
     if (COVERAGE_DIRECTORY === '') {

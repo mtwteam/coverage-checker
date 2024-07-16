@@ -24,7 +24,11 @@ const check = async (coverages, coverageBranch, coverageFiles, reportMessageHead
 
         const detailedDiff = (baseDetailedCoverageResult === null) ? null : compareDetailedCoverages(baseDetailedCoverageResult, coverages[summaryFile].detailed);
 
-        messages.push('*' + coverageFiles.find(e => e.summary === summaryFile).label + '* \n\n' + buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        if (coverageFiles.length === 1) {
+            messages.push(buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        } else {
+            messages.push('*' + coverageFiles.find(e => e.summary === summaryFile).label + '* \n\n' + buildResultMessage(baseOverallCoverages[summaryFile], newOverallCoverage, detailedDiff));
+        }
     }
 
     if (withAverage && Object.keys(coverages).length > 1) {
