@@ -8,7 +8,7 @@ const processBadgeColor = (coverage) => {
         { threshold: 95, color: 'yellow' }
     ];
 
-    for (let i = 0 ; i < colors.length ; i++) {
+    for (let i = 0; i < colors.length; i++) {
         if (coverage < colors[i].threshold) {
             return colors[i].color;
         }
@@ -17,7 +17,7 @@ const processBadgeColor = (coverage) => {
     return 'green';
 }
 
-const getBadgeUrl = (coverage, label) => `https://img.shields.io/static/v1?label=${encodeURIComponent(label)}&message=${encodeURIComponent(coverage)}%25&color=${processBadgeColor(coverage)}&style=for-the-badge`;
+const getBadgeUrl = (coverage, label) => `https://img.shields.io/static/v1?label=${encodeURIComponent(label)}&message=${encodeURIComponent(coverage)}%25&color=${processBadgeColor(coverage)}`;
 
 const generateBadge = async (coverageValue, label, badgeFilename, workingDir) => {
     const badgeContent = await fetch(getBadgeUrl(coverageValue, label));
