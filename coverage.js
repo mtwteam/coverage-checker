@@ -43,9 +43,10 @@ const extractCoverageFromMetricsElement = (metrics) => {
 
 const extractDetailedCoverages = (json) => {
     const out = {};
+    const workingDirectory = process.cwd() + '/';
 
     for (const fileElement of retrieveDetailedFilesElements(json)) {
-        out[fileElement.attributes.path.replace('/home/runner/work/', '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
+        out[fileElement.attributes.path.replace(workingDirectory, '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
     }
 
     return out;
