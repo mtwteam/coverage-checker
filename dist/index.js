@@ -235,7 +235,8 @@ const extractDetailedCoverages = (json) => {
     const workingDirectory = process.cwd() + '/';
 
     for (const fileElement of retrieveDetailedFilesElements(json)) {
-        out[fileElement.attributes.path.replace(workingDirectory, '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
+        const filePath = fileElement.attributes.path || fileElement.attributes.name;
+        out[filePath.replace(workingDirectory, '')] = extractCoverageFromMetricsElement(retrieveMetricsElement(fileElement));
     }
 
     return out;
