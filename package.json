@@ -10,11 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.2.7",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^4.0.0",
     "@actions/glob": "^0.1.1",
-    "node-fetch": "^2.6.1",
-    "requirejs": "^2.3.6",
+    "node-fetch": "^2.6.7",
+    "requirejs": "^2.3.7",
     "xml-js": "^1.6.11"
   }
 }
