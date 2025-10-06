@@ -47,7 +47,7 @@ const buildDetailedDiffMessage = (detailedDiff) => {
 
 const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
     return [
-        ':x: Your code coverage has been degraded :sob:',
+        ':x: Code coverage has been degraded :sob:',
         '(∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3) + '%)',
         buildDeltaMessage(oldCoverage, newCoverage),
         buildDetailedDiffMessage(detailedDiff)
@@ -56,7 +56,9 @@ const buildFailureMessage = (oldCoverage, newCoverage, detailedDiff) => {
 
 const buildSuccessMessage = (oldCoverage, newCoverage, detailedDiff) => {
     return [
-        ':white_check_mark: Your code coverage has not been degraded :tada:',
+        oldCoverage.coverage === newCoverage.coverage
+            ? ':white_check_mark: Code coverage stayed the same'
+            : ':white_check_mark: Code coverage has been improved :tada:',
         '(∆ ' + (newCoverage.coverage - oldCoverage.coverage).toFixed(3) + '%)',
         buildDeltaMessage(oldCoverage, newCoverage),
         buildDetailedDiffMessage(detailedDiff)
