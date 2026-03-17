@@ -1,6 +1,5 @@
-const core = require('@actions/core');
-const fetch = require('node-fetch');
-const process = require('process');
+import * as core from '@actions/core';
+import process from 'process';
 
 const getFromGithub = (url) => fetch(url, {
     headers: {

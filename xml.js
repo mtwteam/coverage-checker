@@ -1,4 +1,4 @@
-const { fail } = require('./core');
+import { fail } from './core.js';
 
 const extractNodes = (tree, name) => {
     if (!tree.elements || tree.elements.length === 0) {

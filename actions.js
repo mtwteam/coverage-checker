@@ -1,8 +1,8 @@
-const fs = require('fs');
-const { generateBadge } = require ('./badge');
-const { compareDetailedCoverages, retrieveBaseCoverage, retrieveBaseDetailedCoverages, retrieveHistory, sumCoverages } = require('./coverage');
-const { clone, push } = require('./git');
-const { buildResultMessage, postMessageOnPullRequest } = require ('./message');
+import fs from 'fs';
+import { generateBadge } from './badge.js';
+import { compareDetailedCoverages, retrieveBaseCoverage, retrieveBaseDetailedCoverages, retrieveHistory, sumCoverages } from './coverage.js';
+import { clone, push } from './git.js';
+import { buildResultMessage, postMessageOnPullRequest } from './message.js';
 
 const check = async (coverages, coverageBranch, coverageFiles, reportMessageHeader, withAverage) => {
     const baseOverallCoverages = {};

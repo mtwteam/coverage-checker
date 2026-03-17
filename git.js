@@ -1,4 +1,4 @@
-const { execute } = require('./core');
+import { execute } from './core.js';
 
 const clone = async (coverageBranch, repository) => {
     const cloneInto = `repo-${new Date().getTime()}`;

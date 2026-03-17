@@ -1,6 +1,6 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const process = require('process');
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import process from 'process';
 
 const buildDeltaMessage = (oldCoverage, newCoverage) => {
     return [
@@ -87,18 +87,18 @@ const postMessageOnPullRequest = async (message, header) => {
     const body = header + '\n\n' + message;
 
     const pullRequestNumber = context.payload.pull_request.number;
-    const octokit = new github.getOctokit(core.getInput('token'));
+    const octokit = github.getOctokit(core.getInput('token'));
 
     const commentId = await retrieveCommentIdFromPullRequest(context, octokit, header);
 
     if (commentId !== null) {
-        await octokit.issues.updateComment({
+        await octokit.rest.issues.updateComment({
             ...context.repo,
             body,
             comment_id: commentId
         });
     } else {
-        await octokit.issues.createComment({
+        await octokit.rest.issues.createComment({
             ...context.repo,
             body,
             issue_number: pullRequestNumber
@@ -109,7 +109,7 @@ const postMessageOnPullRequest = async (message, header) => {
 const retrieveCommentIdFromPullRequest = async (context, octokit, header) => {
     const pullRequestNumber = context.payload.pull_request.number;
 
-    const { data: comments } = await octokit.issues.listComments({
+    const { data: comments } = await octokit.rest.issues.listComments({
         ...context.repo,
         issue_number: pullRequestNumber
     });

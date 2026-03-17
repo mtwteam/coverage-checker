@@ -38,7 +38,7 @@ jobs:
       - name: Run test suite
         run: make test
       - name: Coverage update
-        uses: OpenClassrooms/coverage-checker@v1.0.0
+        uses: mtwteam/coverage-checker@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           action: update
@@ -68,7 +68,7 @@ jobs:
       - name: Run test suite
         run: make test
       - name: Coverage check
-        uses: OpenClassrooms/coverage-checker@v1.0.0
+        uses: mtwteam/coverage-checker@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           action: check

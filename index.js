@@ -1,10 +1,10 @@
-const core = require('@actions/core');
-const process = require('process');
-const { check, update } = require('./actions');
-const { fail } = require('./core');
-const { parseCoverages } = require('./coverage');
-const fs = require('fs');
-const path = require('path');
+import * as core from '@actions/core';
+import process from 'process';
+import { check, update } from './actions.js';
+import { fail } from './core.js';
+import { parseCoverages } from './coverage.js';
+import fs from 'fs';
+import path from 'path';
 
 const ACTION = core.getInput('action');
 const COVERAGE_BRANCH = core.getInput('coverage-branch');

@@ -1,6 +1,6 @@
-const core = require('@actions/core');
-const process = require('process');
-const { exec } = require('child_process');
+import * as core from '@actions/core';
+import process from 'process';
+import { exec } from 'child_process';
 
 const fail = (message) => {
     core.setFailed(message);

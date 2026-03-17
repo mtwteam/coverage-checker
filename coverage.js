@@ -1,9 +1,9 @@
-const convert = require('xml-js');
-const fs = require('fs');
-const glob = require('@actions/glob');
-const { fail } = require('./core');
-const { fetchBaseCoverage, fetchBaseDetailedCoverages, fetchHistory } = require('./remote');
-const { retrieveDetailedFilesElements, retrieveGlobalMetricsElement, retrieveMetricsElement } = require('./xml');
+import * as convert from 'xml-js';
+import fs from 'fs';
+import * as glob from '@actions/glob';
+import { fail } from './core.js';
+import { fetchBaseCoverage, fetchBaseDetailedCoverages, fetchHistory } from './remote.js';
+import { retrieveDetailedFilesElements, retrieveGlobalMetricsElement, retrieveMetricsElement } from './xml.js';
 
 const compareDetailedCoverages = (oldCoverages, newCoverages) => {
     const out = {
